@@ -1,0 +1,776 @@
+<title>スカイラインテクノロジーズ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+
+  /* ================= Tokens ================= */
+  :root{
+    /* dark palette (default / no explicit theme) */
+    --bg:#0a0f1a;
+    --bg-elevated:#111a2b;
+    --bg-panel:#0d1526;
+    --ink:#e9edf5;
+    --ink-dim:#8b96ac;
+    --ink-faint:#5b6579;
+    --accent:#ff9d52;
+    --accent-ink:#1a0f04;
+    --line:rgba(233,237,245,0.12);
+    --line-strong:rgba(233,237,245,0.22);
+    --sky-top:#0a0f1a;
+    --sky-mid:#182544;
+    --sky-glow:#4a3350;
+    --sky-horizon:#d97a3f;
+    --building:#16223a;
+    --window-dim:rgba(233,237,245,0.16);
+    --shadow:0 24px 60px rgba(0,0,0,0.45);
+  }
+
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#eef1f6;
+      --bg-elevated:#ffffff;
+      --bg-panel:#e4e9f1;
+      --ink:#10151f;
+      --ink-dim:#4b5566;
+      --ink-faint:#7b8494;
+      --accent:#d9711f;
+      --accent-ink:#fff8f0;
+      --line:rgba(16,21,31,0.12);
+      --line-strong:rgba(16,21,31,0.22);
+      --sky-top:#e9edf5;
+      --sky-mid:#dfe6f0;
+      --sky-glow:#f0d9c4;
+      --sky-horizon:#e8a765;
+      --building:#1c2740;
+      --window-dim:rgba(16,21,31,0.16);
+      --shadow:0 20px 50px rgba(16,21,31,0.12);
+    }
+  }
+
+  :root[data-theme="dark"]{
+    --bg:#0a0f1a;
+    --bg-elevated:#111a2b;
+    --bg-panel:#0d1526;
+    --ink:#e9edf5;
+    --ink-dim:#8b96ac;
+    --ink-faint:#5b6579;
+    --accent:#ff9d52;
+    --accent-ink:#1a0f04;
+    --line:rgba(233,237,245,0.12);
+    --line-strong:rgba(233,237,245,0.22);
+    --sky-top:#0a0f1a;
+    --sky-mid:#182544;
+    --sky-glow:#4a3350;
+    --sky-horizon:#d97a3f;
+    --building:#16223a;
+    --window-dim:rgba(233,237,245,0.16);
+    --shadow:0 24px 60px rgba(0,0,0,0.45);
+  }
+
+  :root[data-theme="light"]{
+    --bg:#eef1f6;
+    --bg-elevated:#ffffff;
+    --bg-panel:#e4e9f1;
+    --ink:#10151f;
+    --ink-dim:#4b5566;
+    --ink-faint:#7b8494;
+    --accent:#d9711f;
+    --accent-ink:#fff8f0;
+    --line:rgba(16,21,31,0.12);
+    --line-strong:rgba(16,21,31,0.22);
+    --sky-top:#e9edf5;
+    --sky-mid:#dfe6f0;
+    --sky-glow:#f0d9c4;
+    --sky-horizon:#e8a765;
+    --building:#1c2740;
+    --window-dim:rgba(16,21,31,0.16);
+    --shadow:0 20px 50px rgba(16,21,31,0.12);
+  }
+
+  /* ================= Base ================= */
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  body{
+    margin:0;
+    padding-inline:clamp(16px,4vw,40px);
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    font-size:16px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+    font-weight:700;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+
+  p{margin:0;}
+  a{color:inherit;}
+
+  .mono{
+    font-family:"JetBrains Mono","SF Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .eyebrow{
+    font-family:"JetBrains Mono","SF Mono",Consolas,monospace;
+    font-size:0.75rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:0.6em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:1.4em;
+    height:1px;
+    background:var(--accent);
+    display:inline-block;
+  }
+
+  .wrap{max-width:1120px;margin-inline:auto;}
+
+  .rule{
+    height:1px;
+    width:100%;
+    background:linear-gradient(90deg,transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+  }
+
+  section{padding-block:clamp(48px,8vw,96px);}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+    padding:0.85em 1.5em;
+    border-radius:2px;
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .btn-primary{background:var(--accent); color:var(--accent-ink);}
+  .btn-secondary{background:transparent; color:var(--ink); border-color:var(--line-strong);}
+  .btn-secondary:hover{border-color:var(--accent); color:var(--accent);}
+
+  /* ================= Nav ================= */
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    padding-block:18px;
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .brand-mark{flex:none; display:block;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.2;}
+  .brand-ja{font-family:"Zen Old Mincho",serif; font-weight:700; font-size:1.05rem;}
+  .brand-en{font-family:"JetBrains Mono",monospace; font-size:0.62rem; letter-spacing:0.14em; color:var(--ink-faint);}
+  .nav-links{
+    display:flex;
+    gap:clamp(14px,2vw,28px);
+    list-style:none;
+    margin:0;
+    padding:0;
+    font-size:0.9rem;
+  }
+  .nav-links a{text-decoration:none; color:var(--ink-dim); transition:color 0.15s ease;}
+  .nav-links a:hover{color:var(--accent);}
+  .nav-cta{display:none;}
+  @media (min-width:760px){ .nav-cta{display:inline-flex;} }
+  @media (max-width:640px){ .nav-links{display:none;} }
+
+  /* ================= Announcements ================= */
+  .announce{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding-block:12px;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-panel);
+    font-size:0.85rem;
+  }
+  .announce-label{
+    flex:none;
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.7rem;
+    letter-spacing:0.14em;
+    color:var(--accent);
+    border:1px solid var(--accent);
+    border-radius:2px;
+    padding:0.3em 0.65em;
+  }
+  .announce-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 28px;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex:1;
+  }
+  .announce-item{
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    color:var(--ink-dim);
+  }
+  .announce-item time{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.74rem;
+    color:var(--ink-faint);
+    flex:none;
+  }
+  @media (max-width:640px){
+    .announce{flex-direction:column; align-items:flex-start; gap:10px;}
+  }
+
+  /* ================= Hero ================= */
+  .hero{padding-block-start:clamp(56px,9vw,104px); padding-block-end:0;}
+  .hero-grid{
+    display:grid;
+    gap:28px;
+    max-width:760px;
+  }
+  .hero h1{
+    font-size:clamp(2.3rem, 4.2vw + 1rem, 3.6rem);
+    line-height:1.35;
+  }
+  .hero-lead{
+    max-width:56ch;
+    color:var(--ink-dim);
+    font-size:1.05rem;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; padding-block-start:8px;}
+
+  .skyline-wrap{
+    margin-block-start:clamp(40px,7vw,72px);
+    position:relative;
+    width:100%;
+    height:clamp(140px,22vw,240px);
+    border-radius:4px 4px 0 0;
+    overflow:hidden;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-glow) 82%, var(--sky-horizon) 100%);
+  }
+  .skyline-wrap canvas{display:block; width:100%; height:100%;}
+
+  /* ================= Stats ================= */
+  .stats{
+    background:var(--bg-panel);
+    border-block:1px solid var(--line);
+    padding-block:clamp(36px,5vw,56px);
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:24px;
+  }
+  @media (max-width:760px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat{display:flex; flex-direction:column; gap:6px;}
+  .stat-value{
+    font-family:"JetBrains Mono",monospace;
+    font-weight:600;
+    font-size:clamp(1.6rem,2.4vw + 0.6rem,2.2rem);
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+  }
+  .stat-value .unit{font-size:0.55em; color:var(--ink-faint); margin-inline-start:0.2em;}
+  .stat-label{font-size:0.82rem; color:var(--ink-faint);}
+
+  /* ================= Section headers ================= */
+  .section-head{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    max-width:640px;
+    margin-block-end:clamp(32px,5vw,52px);
+  }
+  .section-head h2{font-size:clamp(1.6rem,2.4vw + 0.9rem,2.2rem);}
+  .section-head p{color:var(--ink-dim); max-width:58ch;}
+
+  /* ================= Services ================= */
+  .service-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:700px){ .service-grid{grid-template-columns:1fr;} }
+  .service-card{
+    background:var(--bg);
+    padding:clamp(24px,3vw,32px);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .service-index{font-size:0.78rem; color:var(--accent); letter-spacing:0.08em;}
+  .service-card h3{font-size:1.25rem; font-weight:600;}
+  .service-card p{color:var(--ink-dim); font-size:0.96rem;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:8px; padding-block-start:4px;}
+  .tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    padding:0.35em 0.7em;
+    border:1px solid var(--line-strong);
+    border-radius:2px;
+    color:var(--ink-faint);
+  }
+
+  /* ================= Work ================= */
+  .work-list{display:flex; flex-direction:column;}
+  .work-item{
+    display:grid;
+    grid-template-columns:110px 1fr auto;
+    gap:24px;
+    align-items:start;
+    padding-block:26px;
+    border-top:1px solid var(--line);
+  }
+  .work-item:last-child{border-bottom:1px solid var(--line);}
+  @media (max-width:700px){
+    .work-item{grid-template-columns:1fr; gap:10px;}
+  }
+  .work-period{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    padding-block-start:4px;
+    white-space:nowrap;
+  }
+  .work-body h3{font-size:1.12rem; font-weight:600; margin-block-end:8px;}
+  .work-sector{
+    display:inline-block;
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.7rem;
+    letter-spacing:0.06em;
+    color:var(--accent);
+    border:1px solid currentColor;
+    border-radius:2px;
+    padding:0.2em 0.55em;
+    margin-block-end:10px;
+  }
+  .work-body p{color:var(--ink-dim); max-width:58ch; font-size:0.95rem;}
+  .work-metric{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.85rem;
+    color:var(--ink);
+    text-align:right;
+    white-space:nowrap;
+    padding-block-start:4px;
+  }
+  @media (max-width:700px){ .work-metric{text-align:left;} }
+  .work-note{color:var(--ink-faint); font-size:0.82rem; padding-block-start:18px;}
+
+  /* ================= Company / Values ================= */
+  .company-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(32px,5vw,64px);
+  }
+  @media (max-width:800px){ .company-grid{grid-template-columns:1fr;} }
+
+  .spec-sheet{
+    border:1px solid var(--line);
+    padding:clamp(22px,3vw,30px);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .spec-sheet dl{margin:0; display:flex; flex-direction:column; gap:14px;}
+  .spec-row{display:grid; grid-template-columns:88px 1fr; gap:16px; align-items:baseline;}
+  .spec-row dt{font-family:"JetBrains Mono",monospace; font-size:0.75rem; color:var(--ink-faint); letter-spacing:0.04em;}
+  .spec-row dd{margin:0; font-size:0.95rem;}
+
+  .values{display:flex; flex-direction:column; gap:26px;}
+  .value{display:flex; gap:18px;}
+  .value-mark{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.85rem;
+    color:var(--accent);
+    padding-block-start:2px;
+    flex:none;
+  }
+  .value h3{font-size:1.05rem; font-weight:700; margin-block-end:6px;}
+  .value p{color:var(--ink-dim); font-size:0.94rem; max-width:52ch;}
+
+  /* ================= Footer ================= */
+  footer{
+    border-top:1px solid var(--line);
+    padding-block:clamp(40px,6vw,64px);
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:32px;
+  }
+  @media (max-width:700px){ .footer-grid{grid-template-columns:1fr; gap:28px;} }
+  .footer-brand .brand-ja{font-size:1.1rem;}
+  .footer-address{color:var(--ink-dim); font-size:0.9rem; margin-block-start:14px; line-height:1.8;}
+  .footer-address small{display:block; color:var(--ink-faint); font-size:0.78rem; margin-block-start:4px;}
+  .footer-col h4{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 14px;
+    font-weight:500;
+  }
+  .footer-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .footer-col a{text-decoration:none; color:var(--ink-dim); font-size:0.92rem;}
+  .footer-col a:hover{color:var(--accent);}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-block-start:clamp(32px,5vw,48px);
+    padding-block-start:20px;
+    border-top:1px solid var(--line);
+    color:var(--ink-faint);
+    font-size:0.78rem;
+  }
+</style>
+
+<header class="nav">
+  <a class="brand" href="#top">
+    <svg class="brand-mark" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+      <rect x="2" y="16" width="5" height="12" fill="var(--ink-faint)"></rect>
+      <rect x="9" y="9" width="5" height="19" fill="var(--ink)"></rect>
+      <rect x="16" y="13" width="5" height="15" fill="var(--ink-faint)"></rect>
+      <rect x="23" y="4" width="5" height="24" fill="var(--ink)"></rect>
+      <rect x="24" y="8" width="1.6" height="1.6" fill="var(--accent)"></rect>
+      <rect x="24" y="12" width="1.6" height="1.6" fill="var(--accent)"></rect>
+      <rect x="10.5" y="14" width="1.6" height="1.6" fill="var(--accent)"></rect>
+    </svg>
+    <span class="brand-text">
+      <span class="brand-ja">スカイラインテクノロジーズ</span>
+      <span class="brand-en">SKYLINE TECHNOLOGIES</span>
+    </span>
+  </a>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#services">サービス</a></li>
+      <li><a href="#work">実績</a></li>
+      <li><a href="#company">会社概要</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn-primary nav-cta" href="#contact">相談する</a>
+</header>
+
+<div class="announce">
+  <span class="announce-label mono">NEWS</span>
+  <ul class="announce-list">
+    <li class="announce-item"><time class="mono" datetime="2026-08-20">2026.08.20</time><span>大阪オフィスを開設しました</span></li>
+    <li class="announce-item"><time class="mono" datetime="2026-07-01">2026.07.01</time><span>SRE運用チームの24時間体制を拡充しました</span></li>
+    <li class="announce-item"><time class="mono" datetime="2026-06-15">2026.06.15</time><span>2026年3月期 決算情報を公開しました</span></li>
+  </ul>
+</div>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <p class="eyebrow">SOFTWARE ENGINEERING / URBAN INFRASTRUCTURE</p>
+      <h1>都市の稼働を、<br>止めない。</h1>
+      <p class="hero-lead">
+        スカイラインテクノロジーズは、物流・エネルギー・交通など社会インフラを支える企業のために、
+        クラウド基盤の設計から24時間の運用保守までを一貫して手がけるソフトウェア開発会社です。
+        止まらないことが前提のシステムを、止まらない体制でつくります。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#services">サービスを見る</a>
+        <a class="btn btn-secondary" href="#work">導入実績を見る</a>
+      </div>
+    </div>
+    <div class="skyline-wrap">
+      <canvas id="skyline" aria-hidden="true"></canvas>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap stats-grid">
+      <div class="stat">
+        <span class="stat-value mono">2015</span>
+        <span class="stat-label">設立</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value mono">142<span class="unit">名</span></span>
+        <span class="stat-label">エンジニア数</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value mono">99.98<span class="unit">%</span></span>
+        <span class="stat-label">主要基盤 平均稼働率</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value mono">80<span class="unit">社+</span></span>
+        <span class="stat-label">導入インフラ事業者</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">SERVICES</p>
+        <h2>提供するサービス</h2>
+        <p>設計図を描くところから、運用の当直に立つところまで。4つの専門チームが一気通貫で担当します。</p>
+      </div>
+      <div class="service-grid">
+
+        <article class="service-card">
+          <span class="service-index mono">SPEC-01</span>
+          <h3>クラウド基盤設計・構築</h3>
+          <p>マルチクラウドを前提としたアーキテクチャ設計から、Infrastructure as Codeによる構築・自動化までを一貫して担当します。</p>
+          <div class="tag-row">
+            <span class="tag">AWS / GCP</span>
+            <span class="tag">Terraform</span>
+            <span class="tag">Kubernetes</span>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <span class="service-index mono">SPEC-02</span>
+          <h3>基幹システム刷新</h3>
+          <p>止められないレガシー基幹システムを、段階的な移行計画のもとで置き換えます。設計だけでなく移行計画そのものを成果物とします。</p>
+          <div class="tag-row">
+            <span class="tag">マイクロサービス化</span>
+            <span class="tag">段階移行</span>
+            <span class="tag">データ移行</span>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <span class="service-index mono">SPEC-03</span>
+          <h3>SRE・24時間運用</h3>
+          <p>深夜・早朝を問わず稼働を見続けるオンコール体制と、障害を未然に検知する可観測性基盤を構築・運用します。</p>
+          <div class="tag-row">
+            <span class="tag">オンコール</span>
+            <span class="tag">モニタリング</span>
+            <span class="tag">ポストモーテム</span>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <span class="service-index mono">SPEC-04</span>
+          <h3>データ・分析基盤構築</h3>
+          <p>現場のセンサーやログから意思決定に使えるデータ基盤を設計し、リアルタイムでの異常検知・需要予測を可能にします。</p>
+          <div class="tag-row">
+            <span class="tag">ストリーミング処理</span>
+            <span class="tag">BI</span>
+            <span class="tag">需要予測</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">SELECTED WORK</p>
+        <h2>稼働しているインフラ</h2>
+        <p>いま実際に社会インフラの現場で動いているプロジェクトの一部です。</p>
+      </div>
+
+      <div class="work-list">
+        <div class="work-item">
+          <span class="work-period mono">2022.04 – 2023.02</span>
+          <div class="work-body">
+            <span class="work-sector mono">物流</span>
+            <h3>配送網 リアルタイム配車最適化基盤</h3>
+            <p>大手物流事業者向けに、車両位置とオーダーをリアルタイムに突き合わせる配車エンジンを構築。属人的だった配車業務をシステム化しました。</p>
+          </div>
+          <span class="work-metric">配送遅延 −32%</span>
+        </div>
+
+        <div class="work-item">
+          <span class="work-period mono">2021.09 – 2022.12</span>
+          <div class="work-body">
+            <span class="work-sector mono">エネルギー</span>
+            <h3>スマートグリッド監視システム刷新</h3>
+            <p>地域電力インフラ事業者の老朽化した監視システムを刷新。異常検知のリードタイムを大幅に短縮し、保守体制のオンライン化を実現しました。</p>
+          </div>
+          <span class="work-metric">稼働率 99.99%</span>
+        </div>
+
+        <div class="work-item">
+          <span class="work-period mono">2023.05 – 2024.03</span>
+          <div class="work-body">
+            <span class="work-sector mono">交通インフラ</span>
+            <h3>運行データ分析基盤の新設</h3>
+            <p>鉄道事業者の運行データを一元化する分析基盤を新設。遅延予測モデルを組み込み、指令員の判断を支援する仕組みを構築しました。</p>
+          </div>
+          <span class="work-metric">予測精度 89%</span>
+        </div>
+      </div>
+      <p class="work-note">※ 守秘義務契約に基づき、クライアント名は業種表記で掲載しています。</p>
+    </div>
+  </section>
+
+  <section id="company">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">COMPANY</p>
+        <h2>会社概要と、私たちの考え方</h2>
+      </div>
+
+      <div class="company-grid">
+        <div class="spec-sheet">
+          <dl>
+            <div class="spec-row"><dt class="mono">商号</dt><dd>スカイラインテクノロジーズ株式会社</dd></div>
+            <div class="spec-row"><dt class="mono">設立</dt><dd>2015年4月</dd></div>
+            <div class="spec-row"><dt class="mono">代表</dt><dd>代表取締役CEO 北条 蒼</dd></div>
+            <div class="spec-row"><dt class="mono">所在地</dt><dd>東京都千代田区（本社）</dd></div>
+            <div class="spec-row"><dt class="mono">事業内容</dt><dd>社会インフラ企業向けソフトウェア開発、クラウド基盤構築・運用、データ基盤構築</dd></div>
+            <div class="spec-row"><dt class="mono">従業員数</dt><dd>142名（2026年4月時点）</dd></div>
+          </dl>
+        </div>
+
+        <div class="values">
+          <div class="value">
+            <span class="value-mark mono">§1</span>
+            <div>
+              <h3>止めない設計</h3>
+              <p>都市のインフラは止まらない前提で動いている。だから障害を「起きないもの」ではなく「起きても影響を最小化できるもの」として設計します。</p>
+            </div>
+          </div>
+          <div class="value">
+            <span class="value-mark mono">§2</span>
+            <div>
+              <h3>現場に立つ</h3>
+              <p>オフィスの中だけで基盤は作れません。運用現場や深夜のオンコールに実際に立ち、使われ方を知ってから設計します。</p>
+            </div>
+          </div>
+          <div class="value">
+            <span class="value-mark mono">§3</span>
+            <div>
+              <h3>小さく、速く</h3>
+              <p>大きな刷新ほど、小さく分けて検証する。動くものを早く現場に置き、フィードバックをもとに直します。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <span class="brand-ja">スカイラインテクノロジーズ株式会社</span>
+      <div class="footer-address">
+        東京都千代田区丸の内一丁目
+        <small>（架空の所在地です）</small>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hello@skyline-technologies.example">hello@skyline-technologies.example</a></li>
+        <li>03-0000-0000（架空）</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="#services">サービス</a></li>
+        <li><a href="#work">実績</a></li>
+        <li><a href="#company">会社概要</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© 2026 Skyline Technologies, Inc. — 架空の企業です</span>
+    <a href="#top">ページ先頭へ ↑</a>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var canvas = document.getElementById('skyline');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    function draw(){
+      var dpr = window.devicePixelRatio || 1;
+      var rect = canvas.getBoundingClientRect();
+      if(rect.width === 0 || rect.height === 0) return;
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+
+      var w = rect.width, h = rect.height;
+      ctx.clearRect(0,0,w,h);
+
+      var styles = getComputedStyle(document.documentElement);
+      var buildingColor = styles.getPropertyValue('--building').trim();
+      var lit = styles.getPropertyValue('--accent').trim();
+      var dim = styles.getPropertyValue('--window-dim').trim();
+
+      var seed = 1337;
+      function rand(){ seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+      var x = -10;
+      while (x < w + 10) {
+        var bw = 16 + rand() * 30;
+        var bh = h * (0.32 + rand() * 0.6);
+        var by = h - bh;
+
+        ctx.fillStyle = buildingColor;
+        ctx.fillRect(x, by, bw, bh);
+
+        var cols = Math.max(1, Math.floor(bw / 7));
+        var rows = Math.max(1, Math.floor(bh / 9));
+        for (var r = 0; r < rows; r++) {
+          for (var c = 0; c < cols; c++) {
+            if (rand() > 0.5) continue;
+            var wx = x + 3 + c * 7;
+            var wy = by + 5 + r * 9;
+            if (wx + 3 > x + bw - 2 || wy + 3 > h - 3) continue;
+            ctx.fillStyle = rand() > 0.76 ? lit : dim;
+            ctx.fillRect(wx, wy, 3, 4);
+          }
+        }
+        x += bw + (2 + rand() * 4);
+      }
+    }
+
+    draw();
+    window.addEventListener('resize', draw);
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+    }
+  })();
+</script>
